@@ -4,7 +4,7 @@
 library(tidyverse)
 library(readxl)
 
-raw_data <- read_excel("data/data_cv_bewertung_2026-07-24_11-58.xlsx")
+raw_data <- read_excel("data/data_cv_bewertung_2026-07-28_15-48.xlsx")
 df <- raw_data
 
 ################################################################################
