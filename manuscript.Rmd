@@ -1,0 +1,201 @@
+---
+title             : "Some Long Title - Maybe something more specific"
+shorttitle        : "Short Title"
+
+author: 
+  - name          : "Author 1"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Street Str. 1"
+    email         : "author.one@mail.com"
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - "Conceptualization"
+      - "Writing - Original Draft Preparation"
+      - "Writing - Review & Editing"
+  - name          : "Author 2"
+    affiliation   : "2"
+    role:
+      - "Supervision"
+
+affiliation:
+  - id            : "1"
+    institution   : "Ruprecht-Karls-University Heidelberg"
+  - id            : "2"
+    institution   : "Konstanz Business School"
+  # add a second id using this syntax
+
+authornote: |
+  Author Notes go here.
+
+abstract: |
+  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
+  
+  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
+  
+  One sentence clearly stating the **general problem** being addressed by  this particular study.
+  
+  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
+  
+  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
+  
+  One or two sentences to put the results into a more **general context**.
+  
+  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "keyword, more keyword, crazy keyword"
+wordcount         : "X"
+
+# bibliography      : ["r-references.bib"] # put your ref files here
+
+floatsintext      : yes # for pics in text
+linenumbers       : no
+draft             : no
+mask              : no
+
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+link-citations    : true # custom addin, makes citations link to reference section
+# figsintext        : yes # custom addin
+
+classoption       : "man"
+# the settings below allow compilation of APA7 style citations/documents
+header-includes:
+  - |
+    \makeatletter
+    \renewcommand{\paragraph}{\@startsection{paragraph}{4}{\parindent}%
+      {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+      {-1em}%
+      {\normalfont\normalsize\bfseries\typesectitle}}
+    
+    \renewcommand{\subparagraph}[1]{\@startsection{subparagraph}{5}{1em}%
+      {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+      {-\z@\relax}%
+      {\normalfont\normalsize\bfseries\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
+    \makeatother
+  - | 
+    \raggedbottom
+  - |
+    \usepackage{hhline}
+  - |
+    \setlength{\parskip}{0pt}
+
+csl               : "`r system.file('rmd', 'apa7.csl', package = 'papaja')`"
+documentclass     : "apa7"
+output            : papaja::apa6_pdf
+---
+```{r setup, include = FALSE}
+# Working directory
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+# disallow tables breaking over pages
+knitr::opts_chunk$set(ft.keepnext = TRUE,
+                      ft.align = "left",
+                      ft.latex.float = "float")
+# Seed for random number generation
+set.seed(1234)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed) # this adds random seed to all chunks
+knitr::opts_chunk$set(autodep = TRUE)
+knitr::dep_auto()
+```
+
+<!-- Setup -->
+```{r setup-libraries}
+# think about calling renv here to make sure everyone has the same packages installed
+list.of.packages <- c("tidyverse", "rmarkdown", "papaja", "knitr", "brms", "rstan", "cmdstanr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+library(papaja)
+library(tidyverse)
+library(rmarkdown)
+library(knitr)
+library(acdcquery)
+
+r_refs("markdown/r-references.bib")
+
+r_citations <- cite_r(
+  file = "markdown/r-references.bib",
+  pkgs = c("papaja", "tidyverse", "knitr", "acdcquery", "cmdstanr", "rstan", "brms"),
+  omit = FALSE,
+  footnote = TRUE
+  )
+
+```
+
+
+```{r setup-print-percent}
+print_percent <- function(percent){
+  apa_msg = papaja::apa_num(percent)
+  final = paste0(apa_msg, " %")
+  return(final)
+}
+
+print_freq_percent <- function(freq){
+  percent = freq*100
+  apa_msg = papaja::apa_num(percent)
+  final = paste0(apa_msg, " %")
+  return(final)
+}
+
+
+print_rel <- function(rel){
+  return(paste0("$\alpha~=~", papaja::apa_num(rel), "$"))
+}
+
+print_icc <- function(icc){
+  return(paste0("$ICC~=~", papaja::apa_num(icc), "$"))
+}
+```
+
+```{r}
+source("")
+```
+
+
+<!-- Here we can incorporate child markdown-documents as the separate parts -->
+# Introduction
+something about the validity of big5 and g for job performance
+
+something about need for assessment of big5 and g in job performance
+
+something about cv being the first (and least costly) opportunity to assess big5
+
+something about needing to figure out whether this can be done reliably and with sufficient validity, also highlighting that is is likely done already
+
+here maybe (or one above) the previous findings
+
+the present study aims to do this better in the following ways:
+- use CVs from the general population
+- also assess intelligence
+- large sample, no training, real "zero shot" estimation
+
+# Methods
+Participants for CV
+
+Participants for Estimation
+- study 1 
+- study 2
+
+CV materials, describe range and anonymization protocoll
+
+procedure, how were people asked to rank (also with what scales)
+
+analysis: how are we assessing reliability, how are we quantifying validity
+
+# Results
+ICC estimates
+
+validity estimates, single subject and average
+
+# Discussion
+
+
+<!-- References -->
+\newpage
+# References
+::: {#refs custom-style="Bibliography"}
+:::
+

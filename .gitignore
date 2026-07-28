@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+/anonym_cvs
+/coded_cvs
+/raw_cvs
+/empra
+/data
