@@ -1,22 +1,42 @@
 ---
-title             : "Some Long Title - Maybe something more specific"
-shorttitle        : "Short Title"
+title             : "Judging a book by its cover - investigating personality and intelligence judgments based on resumes (**WIP**)"
+shorttitle        : "**WIP** Resume-based judgments"
 
 author: 
-  - name          : "Author 1"
+  - name          : "Sven Lesche"
     affiliation   : "1"
     corresponding : yes    # Define only one corresponding author
-    address       : "Street Str. 1"
-    email         : "author.one@mail.com"
-    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
-      - "Conceptualization"
-      - "Writing - Original Draft Preparation"
-      - "Writing - Review & Editing"
-  - name          : "Author 2"
-    affiliation   : "2"
-    role:
-      - "Supervision"
-
+    address       : "Hauptstraße 47-51, 69117 Heidelberg"
+    email         : "sven.lesche@psychologie.uni-heidelberg.de"
+    # role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+    #   - "Conceptualization"
+    #   - "Writing - Original Draft Preparation"
+    #   - "Writing - Review & Editing"
+  - name          : "Valeria Maisch"
+    affiliation   : "1"
+    # role:
+    #   - "Supervision"
+  - name          : "Annika Leisse"
+    affiliation   : "1"
+    # role:
+    #   - "Supervision"
+  - name          : "Carolin Strauß"
+    affiliation   : "1"
+    # role:
+    #   - "Supervision"
+  - name          : "Nathalie Engelmann"
+    affiliation   : "1"
+    # role:
+    #   - "Supervision"
+  - name          : "Nele Pfründer"
+    affiliation   : "1"
+    # role:
+    #   - "Supervision"
+  - name          : "Tanja Bipp"
+    affiliation   : "1"
+    # role:
+    #   - "Supervision"
+    
 affiliation:
   - id            : "1"
     institution   : "Ruprecht-Karls-University Heidelberg"
@@ -28,26 +48,16 @@ authornote: |
   Author Notes go here.
 
 abstract: |
-  One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
-  
-  Two to three sentences of **more detailed background**, comprehensible  to scientists in related disciplines.
-  
-  One sentence clearly stating the **general problem** being addressed by  this particular study.
-  
-  One sentence summarizing the main result (with the words "**here we show**" or their equivalent).
-  
-  Two or three sentences explaining what the **main result** reveals in direct comparison to what was thought to be the case previously, or how the  main result adds to previous knowledge.
-  
-  One or two sentences to put the results into a more **general context**.
-  
-  Two or three sentences to provide a **broader perspective**, readily comprehensible to a scientist in any discipline.
-  
-  <!-- https://tinyurl.com/ybremelq -->
-  
-keywords          : "keyword, more keyword, crazy keyword"
-wordcount         : "X"
+  Personality and intelligence are among the strongest predictors of job performance. The present study examined whether these characteristics can be assessed at an early stage of the hiring process using only applicants' CVs. To this end, we collected 25 CVs as used for application processes from members of the general population and measured their personality via the BFI-2 scale and general intelligence using the IST-2000-R. Subsequently, two indendent samples of 298 and 416 participants rated each applicant's personality and intelligence based solely on anonymized CVs.
 
-# bibliography      : ["r-references.bib"] # put your ref files here
+  Across both samples, personality ratings by individual raters showed low inter-rater reliability (ICC = .11 - .22) and weak associations with applicants' actual personality scores (r = .05 - .26). In contrast, intelligence ratings demonstrated higher inter-rater reliability (ICC = .35) and moderate predictive validity (r = .46). Averaging ratings across all raters for a given CV substantially improved reliability and increased predictive validity for both personality (up to r = .53) and intelligence (r = .77). 
+
+  These findings suggest that individual raters are generally unable to accurately infer personality from CVs, whereas intelligence can be estimated with somewhat greater accuracy. Importantly, the marked improvement obtained by aggregating ratings indicates that CVs contain systematic information about these traits that can be extracted more reliably through collective judgment. This raises the possibility that better-trained recruiters or algorithmic approaches could leverage such information to provide an early assessment of important applicant characteristics during the selection process. 
+
+keywords          : "personality, resume, intelligence, SOMETHING ELSE?"
+# wordcount         : "X"
+
+bibliography      : ["r-references.bib", "cv-judgment.bib"] # put your ref files here
 
 floatsintext      : yes # for pics in text
 linenumbers       : no
