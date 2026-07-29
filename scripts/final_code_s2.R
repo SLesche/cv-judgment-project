@@ -191,7 +191,7 @@ kriterien_paper_data <- final_data %>%
     TRUE ~ technischer_name
   ))
 
-ggplot(kriterien_paper_data, aes(x = prozentsatz, y = reorder(Inhaltliches_Kriterium, prozentsatz))) +
+begründungen_plot <- ggplot(kriterien_paper_data, aes(x = prozentsatz, y = reorder(Inhaltliches_Kriterium, prozentsatz))) +
   geom_col(fill = "steelblue4", width = 0.7) +
   geom_text(aes(label = paste(prozentsatz, "%")), hjust = -0.2, size = 3.5, color = "black") +
   expand_limits(x = max(kriterien_paper_data$prozentsatz) * 1.1) +
@@ -324,12 +324,12 @@ required_raters(icc_ergebnisse[["geschaetzer_IQ"]]$ICC[2], 0.90)
 
 # --- Globale Akkuratheit (Signifikanztests) ---
 print("--- Signifikanztests Globale Korrelationen ---")
-cor.test(final_data$geschaetzte_Extraversion, final_data$wahre_Extraversion)
-cor.test(final_data$geschaetzte_Vertraeglichkeit, final_data$wahre_Vertraeglichkeit)
-cor.test(final_data$geschaetzte_Gewissenhaftigkeit, final_data$wahre_Gewissenhaftigkeit)
-cor.test(final_data$geschaetzter_Neurotizismus, final_data$wahrer_Neurotizismus)
-cor.test(final_data$geschaetzte_Offenheit, final_data$wahre_Offenheit)
-cor.test(final_data$geschaetzer_IQ, final_data$wahre_Intelligenz)
+accuracy_cor_extra <- cor.test(final_data$geschaetzte_Extraversion, final_data$wahre_Extraversion)
+accuracy_cor_vertr <- cor.test(final_data$geschaetzte_Vertraeglichkeit, final_data$wahre_Vertraeglichkeit)
+accuracy_cor_gewiss <- cor.test(final_data$geschaetzte_Gewissenhaftigkeit, final_data$wahre_Gewissenhaftigkeit)
+accuracy_cor_neuro <- cor.test(final_data$geschaetzter_Neurotizismus, final_data$wahrer_Neurotizismus)
+accuracy_cor_offen <- cor.test(final_data$geschaetzte_Offenheit, final_data$wahre_Offenheit)
+accuracy_cor_iq <- cor.test(final_data$geschaetzer_IQ, final_data$wahre_Intelligenz)
 
 # # --- Akkuratheitsvergleich nach Gruppen ---
 # print("--- Korrelationen nach Fachgruppe (2 = Psychologie) ---")
@@ -373,7 +373,7 @@ average_data_per_cv <- final_data %>%
   ) %>% 
   ungroup() 
 
-average_data_per_cv %>% 
+average_data_cors <- average_data_per_cv %>% 
   summarise(
     r_Extraversion       = cor(mean_Extraversion, wahre_Extraversion, use = "complete.obs"),
     r_Vertraeglichkeit   = cor(mean_Vertraeglichkeit, wahre_Vertraeglichkeit, use = "complete.obs"),
@@ -387,7 +387,7 @@ m1 <- lm(wahre_Intelligenz ~ education, data = average_data_per_cv)
 
 m2 <- lm(wahre_Intelligenz ~ mean_IQ + education, data = average_data_per_cv)
 
-anova(m1, m2)
+model_comp <- anova(m1, m2)
 
 ################################################################################
 # DESKRIPTIVE STATISTIKEN DER BEWERTETEN LEBENS LÄUFE (WAHRE WERTE)

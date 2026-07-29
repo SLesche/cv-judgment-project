@@ -104,7 +104,7 @@ knitr::dep_auto()
 <!-- Setup -->
 ```{r setup-libraries}
 # think about calling renv here to make sure everyone has the same packages installed
-list.of.packages <- c("tidyverse", "rmarkdown", "papaja", "knitr", "brms", "rstan", "cmdstanr")
+list.of.packages <- c("tidyverse", "rmarkdown", "papaja", "knitr", "psych")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
@@ -112,13 +112,14 @@ library(papaja)
 library(tidyverse)
 library(rmarkdown)
 library(knitr)
-library(acdcquery)
+library(psych)
+library(readxl)
 
 r_refs("markdown/r-references.bib")
 
 r_citations <- cite_r(
   file = "markdown/r-references.bib",
-  pkgs = c("papaja", "tidyverse", "knitr", "acdcquery", "cmdstanr", "rstan", "brms"),
+  pkgs = c("papaja", "tidyverse", "knitr", "psych"),
   omit = FALSE,
   footnote = TRUE
   )
@@ -150,11 +151,6 @@ print_icc <- function(icc){
 }
 ```
 
-```{r}
-source("")
-```
-
-
 <!-- Here we can incorporate child markdown-documents as the separate parts -->
 # Introduction
 something about the validity of big5 and g for job performance
@@ -173,17 +169,118 @@ the present study aims to do this better in the following ways:
 - large sample, no training, real "zero shot" estimation
 
 # Methods
-Participants for CV
+```{r}
+true_values <- read_excel("empra/cv_scores.xlsx")
+colnames(true_values) <- as.character(true_values[1, ])
 
-Participants for Estimation
-- study 1 
-- study 2
+true_values_clean <- true_values[-1, ] %>%
+  select(
+    lebenslauf_id,
+    age = age,
+    education = education,
+    gender = gender,
+    work = work,
+    wahre_Extraversion = extraversion,
+    wahre_Vertraeglichkeit = agreeableness,
+    wahre_Gewissenhaftigkeit = conscientiousness,
+    wahrer_Neurotizismus = neuroticism,
+    wahre_Offenheit = openness,
+    wahre_Intelligenz = Total_sum
+  ) %>%
+  mutate(
+    education = case_when(
+      education == "Realschulsabschluss" ~ 1,
+      education == "Ausbildung" ~ 2,
+      education == "Abitur" ~ 3,
+      education == "Bachelor" ~ 4,
+      education == "Master" ~ 5,
+      education == "Promotion" ~ 6,
+    )
+  )
+```
+We recruited a total of `r nrow(true_values_clean)` participants ($M_{age} =$ `r mean(as.numeric(true_values_clean$age)) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(true_values_clean$age)) %>% apa_num()`, `r mean(true_values_clean$gender == "weiblich") %>% print_freq_percent()` female) who provided anonymized CVs to be rated. These participants were the subsample of a larger study collected at Heidelberg University who agreed to share their CV for the current work.
 
-CV materials, describe range and anonymization protocoll
+```{r}
+s1_data <- read_excel("data/data_big-five-lebenslauf_2026-06-01_14-23.xlsx")
+s2_data <- read_excel("data/data_cv_bewertung_2026-07-28_15-48.xlsx")
 
-procedure, how were people asked to rank (also with what scales)
+```
 
-analysis: how are we assessing reliability, how are we quantifying validity
+For Study 1, we recruited participants from a) the student population of Heidelberg University and b) an internet-based recruitment of German speakers on the platform Reddit. In total, we recruited `r nrow(s1_data)` participants ($M_{age} =$ `r mean(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s1_data$SD01 == "1") %>% print_freq_percent()` female).
+
+For Study 2, we recruited participants from a private university in Heidelberg (FOM). Here, students typically work in addition to their studies.. In total, we recruited `r nrow(s2_data)` participants ($M_{age} =$ `r mean(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s2_data$SD01 == "1") %>% print_freq_percent()` female).
+
+## Materials
+To assess the personality of participants providing their CV, we used the german version of the Big Five Inventory 2 (BFI-2) [CITATION]. The BFI-2 consists of 12 likert-scale items per factor, 60 items total. It has previously shown consistently good reliability ($\alpha$ > 0.8) and validity [CITATION].
+
+To assess the intelligence of participants providing their CV, we used the Intelligence-Structure-Test (IST) 2000-R [CITATION]. We only used the basic module ("Grundmodul") to assess fluid intelligence. This module consists of 9 subtests in three domains: verbal, numeric, and figural. It has demonstrated very good reliability $\alpha > 0.95$ and validity [CITATION liepmann].
+
+The participants voluntarily provided their CVs and were instructed to provide them "as is" without adhering to a special format provided by the authors. CVs were subsequently anonymyzed by redacting any identifying information such as names, date of birth, company names, publication titles, or very specific job descriptions. In total, we received 25 CVs.
+
+## Procedure
+The participants providing their CV were part of a larger study (N = 200) that assessed the relationship between mental speed and intelligence. They completed the study in two sessions. In the first session, participants first completed memory tasks using EEG for about 2 hours, then they completed a questionnaire, including the BFI-2, finally, they completed 4 short working-memory tasks. The second session was conducted on another day by a trained experimenter and consisted of the IST, which required 90 minutes and then the Advanced Progressive Matrices [CITATION], which required 50 minutes. Results of the APM are not reported here. Following completion of the second session, participants were emailed and informed about the aim of the present study, the extent to which their CVs would be used and could volunteer to provide a CV which would be anonymized.
+
+In Study 1, participants completed an online-survey on the hosting platform SoSciSurvey [CITATION]. They gave informed consent, and were asked to provide demographic information, experience with the Big Five personality model (yes/no) and experience with selection processes including CVs (scale of 1 - "no experience"  to 5 - "a lot of experience"). Then, we instructed the participants to inspect five CVs carefully and provide a rating of the person's personality. Personality raters were given on sliders from 0 to 100 with no numeric labels but verbal labels on both ends of the slider. These labels described the personality dimensions to be rated (see Table \@ref(tab:rating-scale-anchors)).
+
+```{r rating-scale-anchors}
+rating_labels <- data.frame(
+  Dimension = c(
+    "Extraversion",
+    "Emotional Stability",
+    "Conscientiousness",
+    "Agreeableness",
+    "Openness",
+    "Intelligence"
+  ),
+  Left_Anchor_German = c(
+    "zurückhaltend, reserviert",
+    "selbstsicher, ruhig",
+    "nachlässig, unsorgfältig",
+    "wenig kooperativ, konfrontativ",
+    "konservativ, vorsichtig",
+    "wenig intelligent"
+  ),
+  Right_Anchor_German = c(
+    "gesellig, kontaktfreudig, sozial",
+    "emotional, verletzlich",
+    "zuverlässig, sorgfältig",
+    "kooperativ, freundlich",
+    "neugierig, erfinderisch",
+    "sehr intelligent"
+  ),
+  Left_Anchor_English = c(
+    "reserved, withdrawn",
+    "self-confident, calm",
+    "careless, negligent",
+    "uncooperative, confrontational",
+    "conservative, cautious",
+    "not very intelligent"
+  ),
+  Right_Anchor_English = c(
+    "sociable, outgoing, social",
+    "emotional, vulnerable",
+    "reliable, conscientious",
+    "cooperative, friendly",
+    "curious, inventive",
+    "very intelligent"
+  ),
+  check.names = FALSE
+)
+
+papaja::apa_table(
+  rating_labels,
+  caption = "Slider anchors used for personality and intelligence ratings."
+)
+```
+
+Each CV was presented by itself with the rating sliders below and multi-choice question asking which criteria they used to make their decision (e.g. "Education", "Work experience and profile"). After participants rated 5 random CVs, they were asked whether they wanted to continue and rate five more CVs. This was possible up to a total of 15 CVs rated by each participant. 
+
+Finally, participants indicated whether they payed attention during the survey and whether all of the CVs were presented without issues. Students of the University or the FOM could indicate that they wanted to receive course credits. No other rewards were issued.
+
+## Analysis
+We estimated the reliability of ratings for each dimension (Big Five and Intelligence) separately using ICC(2) as implemented in the R package `psych` [@R-psych] to assess the absolute agreement of a single random rater. Based on this assessment, we provide the necessary number of raters whose average rating would achieve a reliability of 0.90. 
+
+We estimated the accuracy of ratings in two ways. First, to assess the accuracy of only a single rater, we calculated the correlation across all CVs and raters between the rater's judgment and the underlying Big Five or intelligence score. Second, we average across all judgments for each CV and then calculated the correlation between average rating and underlying score.
 
 # Results
 ICC estimates
