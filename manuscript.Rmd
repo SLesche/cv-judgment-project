@@ -98,6 +98,8 @@ knitr::opts_chunk$set(ft.keepnext = TRUE,
 set.seed(1234)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed) # this adds random seed to all chunks
 knitr::opts_chunk$set(autodep = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+
 knitr::dep_auto()
 ```
 
@@ -144,6 +146,10 @@ print_freq_percent <- function(freq){
 
 print_rel <- function(rel){
   return(paste0("$\alpha~=~", papaja::apa_num(rel), "$"))
+}
+
+print_cor <- function(cor){
+  return(paste0("$r~=~", papaja::apa_num(cor), "$"))
 }
 
 print_icc <- function(icc){
@@ -206,9 +212,9 @@ s2_data <- read_excel("data/data_cv_bewertung_2026-07-28_15-48.xlsx")
 
 ```
 
-For Study 1, we recruited participants from a) the student population of Heidelberg University and b) an internet-based recruitment of German speakers on the platform Reddit. In total, we recruited `r nrow(s1_data)` participants ($M_{age} =$ `r mean(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s1_data$SD01 == "1") %>% print_freq_percent()` female).
+For Study 1, we recruited participants from a) the student population of Heidelberg University and b) an internet-based recruitment of German speakers on the platform Reddit. In total, we recruited `r nrow(s1_data)` participants ($M_{age} =$ `r mean(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s1_data$SD01 == "1", na.rm = TRUE) %>% print_freq_percent()` female).
 
-For Study 2, we recruited participants from a private university in Heidelberg (FOM). Here, students typically work in addition to their studies.. In total, we recruited `r nrow(s2_data)` participants ($M_{age} =$ `r mean(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s2_data$SD01 == "1") %>% print_freq_percent()` female).
+For Study 2, we recruited participants from a private university in Heidelberg (FOM). Here, students typically work in addition to their studies.. In total, we recruited `r nrow(s2_data)` participants ($M_{age} =$ `r mean(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s2_data$SD01 == "1", na.rm = TRUE) %>% print_freq_percent()` female).
 
 ## Materials
 To assess the personality of participants providing their CV, we used the german version of the Big Five Inventory 2 (BFI-2) [CITATION]. The BFI-2 consists of 12 likert-scale items per factor, 60 items total. It has previously shown consistently good reliability ($\alpha$ > 0.8) and validity [CITATION].
@@ -275,17 +281,118 @@ papaja::apa_table(
 
 Each CV was presented by itself with the rating sliders below and multi-choice question asking which criteria they used to make their decision (e.g. "Education", "Work experience and profile"). After participants rated 5 random CVs, they were asked whether they wanted to continue and rate five more CVs. This was possible up to a total of 15 CVs rated by each participant. 
 
-Finally, participants indicated whether they payed attention during the survey and whether all of the CVs were presented without issues. Students of the University or the FOM could indicate that they wanted to receive course credits. No other rewards were issued.
+Finally, participants indicated whether they payed attention during the survey and whether all of the CVs were presented without issues. Students of the University or the FOM could indicate that they wanted to receive course credits. No other rewards were issued. The median completion time for participants who viewed only five CVs was around 10 minutes.
+
+The procedure was identical for Study 2, except that participants completed another, unrelated survey for about 10 minutes prior to the presented survey.
 
 ## Analysis
-We estimated the reliability of ratings for each dimension (Big Five and Intelligence) separately using ICC(2) as implemented in the R package `psych` [@R-psych] to assess the absolute agreement of a single random rater. Based on this assessment, we provide the necessary number of raters whose average rating would achieve a reliability of 0.90. 
+We estimated the reliability of ratings for each dimension (Big Five and Intelligence) separately using ICC(2) as implemented in the R package `psych` [@R-psych] to assess the absolute agreement of a single random rater. Based on this assessment and the Spearman-Brown prophecy formula, we provide the necessary number of raters whose average rating would achieve a reliability of 0.90. 
 
 We estimated the accuracy of ratings in two ways. First, to assess the accuracy of only a single rater, we calculated the correlation across all CVs and raters between the rater's judgment and the underlying Big Five or intelligence score. Second, we average across all judgments for each CV and then calculated the correlation between average rating and underlying score.
 
 # Results
-ICC estimates
+```{r}
+source("scripts/final_code.R")
+source("scripts/final_code_s2.R")
+```
+We removed participants if they indicated that they were somewhat strongly or very strongly distracted during completion of the survey. Additionally, we removed participants who completed the entire survey in less than half of median completion time for participants who rated five CVs. Following data exclusion, $N =$ `r n_raters_final_cleaned_s1` participants remained in Study 1 and $N =$ `r n_raters_final_cleaned_s2` participants in Study 2. On average, each CV was judged by `r average_raters_per_cv_s1` participants in Study 1 and `r average_raters_per_cv_s2` participants in Study 2.
 
-validity estimates, single subject and average
+We provide an overview of descriptive information in Table A1 in the appendix.
+
+```{r rel-overview-tab}
+# Consolidate reliability estimates
+overview_reliability_table = data.frame(
+  construct = c("Extraversion", "Neuroticism", "Conscientiousness", "Agreeableness", "Openness", "Intelligence"),
+  study_1 = 1:6,
+  required_1 = 1:6,
+  study_2 = 1:6,
+  required_2 = 1:6
+)
+
+merkmale <- c("geschaetzte_Extraversion", "geschaetzter_Neurotizismus", "geschaetzte_Gewissenhaftigkeit", "geschaetzte_Vertraeglichkeit", "geschaetzte_Offenheit", "geschaetzer_IQ")
+for (i in seq_along(merkmale)){
+  merkmal = merkmale[i]
+  
+  icc_2_s1 = icc_ergebnisse_s1[[merkmal]]$ICC[2]
+  required_s1 = required_raters(icc_2_s1, 0.90)
+  icc_2_s1_lb = icc_ergebnisse_s1[[merkmal]]$`lower bound`[2]
+  icc_2_s1_ub = icc_ergebnisse_s1[[merkmal]]$`upper bound`[2]
+  
+  s1_final = paste0(apa_num(icc_2_s1), " [", apa_num(icc_2_s1_lb), ", ", apa_num(icc_2_s1_ub), "]")
+  
+  icc_2_s2 = icc_ergebnisse_s2[[merkmal]]$ICC[2]
+  required_s2 = required_raters(icc_2_s2, 0.90)
+  icc_2_s2_lb = icc_ergebnisse_s2[[merkmal]]$`lower bound`[2]
+  icc_2_s2_ub = icc_ergebnisse_s2[[merkmal]]$`upper bound`[2]
+  
+  s2_final = paste0(apa_num(icc_2_s2), " [", apa_num(icc_2_s2_lb), ", ", apa_num(icc_2_s2_ub), "]")
+  
+  overview_reliability_table$study_1[i] = s1_final
+  overview_reliability_table$study_2[i] = s2_final
+  overview_reliability_table$required_1[i] = required_s1
+  overview_reliability_table$required_2[i] = required_s2
+}
+
+papaja::apa_table(
+  overview_reliability_table,
+  caption = "Interrater reliability of resume based judgments for big five and intelligence",
+  note = "SOMETHING ABOUT THE TABLE COLUMN NAMES"
+)
+```
+
+Table \@ref(tab:rel-overview-tab) provides an overview of the interrater reliability for the resume judgments. Highest reliability was observed for intelligence (Study 1: `r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Intelligence")] %>% print_icc()`, Study 2: `r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Intelligence")] %>% print_icc()`), followed by extraversion (Study 1: `r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Extraversion")] %>% print_icc()`, Study 2: `r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Extraversion")] %>% print_icc()`). The lowest reliability was observed for agreeableness in Study 1 (`r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Agreeableness")] %>% print_icc()`) and openness in Study 2 (`r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Openness")] %>% print_icc()`). The number of participants required to achieve good reliability of an average judgment ranged from `r min(c(overview_reliability_table$required_1, overview_reliability_table$required_2))` to `r max(c(overview_reliability_table$required_1, overview_reliability_table$required_2))`.
+
+```{r acc-overview-tab}
+paste_cor <- function(cor_test){
+  paste0(apa_num(cor_test$estimate[[1]]), " [", apa_num(cor_test$conf.int[1]), ", ", apa_num(cor_test$conf.int[2]), "]")
+}
+
+# Consolidate reliability estimates
+overview_accuracy_table = data.frame(
+  construct = c("Extraversion", "Neuroticism", "Conscientiousness", "Agreeableness", "Openness", "Intelligence"),
+  study_1 = c(
+    paste_cor(accuracy_cor_extra_s1),
+    paste_cor(accuracy_cor_neuro_s1),
+    paste_cor(accuracy_cor_gewiss_s1),
+    paste_cor(accuracy_cor_vertr_s1),
+    paste_cor(accuracy_cor_offen_s1),
+    paste_cor(accuracy_cor_iq_s1)
+  ),
+  avg_study_1 = c(
+    average_data_cors_s1$Extraversion,
+    average_data_cors_s1$Neurotizismus,
+    average_data_cors_s1$Gewissenhaftigkeit,
+    average_data_cors_s1$Vertraeglichkeit,
+    average_data_cors_s1$Offenheit,
+    average_data_cors_s1$IQ
+  ), 
+  study_2 = c(
+    paste_cor(accuracy_cor_extra_s2),
+    paste_cor(accuracy_cor_neuro_s2),
+    paste_cor(accuracy_cor_gewiss_s2),
+    paste_cor(accuracy_cor_vertr_s2),
+    paste_cor(accuracy_cor_offen_s2),
+    paste_cor(accuracy_cor_iq_s2)
+  ),
+  avg_study_2 = c(
+    average_data_cors_s2$Extraversion,
+    average_data_cors_s2$Neurotizismus,
+    average_data_cors_s2$Gewissenhaftigkeit,
+    average_data_cors_s2$Vertraeglichkeit,
+    average_data_cors_s2$Offenheit,
+    average_data_cors_s2$IQ
+  )
+)
+
+papaja::apa_table(
+  overview_accuracy_table,
+  caption = "Accuracy of resume based judgments for big five and intelligence",
+  note = "SOMETHING ABOUT THE TABLE COLUMN NAMES. PROVIDE THE N RATERS AND N CVS HERE ALSO"
+)
+```
+Table \@ref(tab:acc-overview-tab) provides an overview of the accuracy of resume judgments. Highest accuracy was observed for intelligence (Study 1: `r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()`, Study 2: `r overview_accuracy_table$study_2[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()`), followed by neuroticism (Study 1: `r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Neuroticism")] %>% print_cor()`), Study 2: (`r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Neuroticism")] %>% print_cor()`). The lowest accuracy was observed for openness in both studies (Study 1: `r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Openness")] %>% print_cor()`, Study 2: `r overview_accuracy_table$study_2[which(overview_accuracy_table$construct == "Openness")] %>% print_cor()`).
+
+Accuracy improved for all judgments after averaging across raters for each CV. Here, the average intelligence rating correlated with actual intelligence at `r overview_accuracy_table$avg_study_1[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` in Study 1 and `r overview_accuracy_table$avg_study_2[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` in Study 2. Notably, intelligence judgments based on the resume provided incremental validity on actual intelligence over pure educational status of the resume's creator. Additional details on these models can be found in the appendix.
 
 # Discussion
 
@@ -296,3 +403,13 @@ validity estimates, single subject and average
 ::: {#refs custom-style="Bibliography"}
 :::
 
+# Appendix
+
+## Descriptive Information
+
+## Testing incremental validity
+Something about the data
+
+something about the model
+
+something about model comparison, something about their R2, something about the result of model comparison test

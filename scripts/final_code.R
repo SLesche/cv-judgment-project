@@ -26,7 +26,9 @@ count_resumes <- function(row, prefixes) {
 df$anzahl_lebenslaeufe <- apply(df, 1, count_resumes, prefixes = block_prefixes)
 
 df <- df %>% mutate(TIME_SUM = as.numeric(TIME_SUM))
-referenz_gruppe <- df %>% filter(anzahl_lebenslaeufe == 5)
+referenz_gruppe <- df %>% filter(anzahl_lebenslaeufe == 5) %>%
+  mutate(FR16 = as.numeric(FR16)) %>% 
+  filter(FR16 <= 3 | is.na(FR16))
 median_5_ll <- median(referenz_gruppe$TIME_SUM, na.rm = TRUE)
 cut_off_wert <- median_5_ll / 2
 
@@ -68,7 +70,7 @@ cv_long <- final_cleaned_data %>%
   pivot_wider(names_from = merkmal_name, values_from = wert) %>%
   mutate(lebenslauf_id = as.numeric(lebenslauf_id))
 
-average_raters_per_cv <- cv_long %>% 
+average_raters_per_cv_s1 <- cv_long %>% 
   count(lebenslauf_id) %>% 
   pull(n) %>% 
   mean()
@@ -164,6 +166,8 @@ final_data <- final_data %>%
     wahrer_Neurotizismus = as.numeric(wahrer_Neurotizismus)
   )
 
+n_raters_final_cleaned_s1 <- length(unique(final_data$CASE))
+
 ################################################################################
 # 4. KRITERIENVERWENDUNG & VISUALISIERUNG
 ################################################################################
@@ -192,7 +196,7 @@ kriterien_paper_data <- final_data %>%
     TRUE ~ technischer_name
   ))
 
-begründungen_plot <- ggplot(kriterien_paper_data, aes(x = prozentsatz, y = reorder(Inhaltliches_Kriterium, prozentsatz))) +
+begründungen_plot_s1 <- ggplot(kriterien_paper_data, aes(x = prozentsatz, y = reorder(Inhaltliches_Kriterium, prozentsatz))) +
   geom_col(fill = "steelblue4", width = 0.7) +
   geom_text(aes(label = paste(prozentsatz, "%")), hjust = -0.2, size = 3.5, color = "black") +
   expand_limits(x = max(kriterien_paper_data$prozentsatz) * 1.1) +
@@ -210,26 +214,26 @@ begründungen_plot <- ggplot(kriterien_paper_data, aes(x = prozentsatz, y = reor
 
 ################################################################################
 # 5. ÜBERBLICK ÜBER DEMOGRAFISCHE DATEN (Personenebene)
-################################################################################
-demo_sample <- final_data %>% distinct(CASE, .keep_all = TRUE)
-
-print("--- Altersverteilung ---")
-demo_sample %>% summarise(N = n(), Mittelwert = mean(Alter, na.rm = TRUE), SD = sd(Alter, na.rm = TRUE), Min = min(Alter, na.rm = TRUE), Max = max(Alter, na.rm = TRUE))
-
-print("--- Geschlechtsverteilung ---")
-demo_sample %>% count(Geschlecht) %>% mutate(Prozent = n / sum(n) * 100)
-
-print("--- Studienwahl Codes ---")
-demo_sample %>% count(Studienwahl, Studienwahl_Sonstiges)
-
-print("--- Formale Bildung ---")
-demo_sample %>% count(Formale_Bildung)
-
-print("--- Big5 Erfahrung ---")
-demo_sample %>% count(Big5_Erfahrung)
-
-print("--- Erfahrung mit Auswahlprozessen ---")
-demo_sample %>% count(Auswahlprozesse)
+# ################################################################################
+# demo_sample <- final_data %>% distinct(CASE, .keep_all = TRUE)
+# 
+# # print("--- Altersverteilung ---")
+# demo_sample %>% summarise(N = n(), Mittelwert = mean(Alter, na.rm = TRUE), SD = sd(Alter, na.rm = TRUE), Min = min(Alter, na.rm = TRUE), Max = max(Alter, na.rm = TRUE))
+# 
+# # print("--- Geschlechtsverteilung ---")
+# demo_sample %>% count(Geschlecht) %>% mutate(Prozent = n / sum(n) * 100)
+# 
+# # print("--- Studienwahl Codes ---")
+# demo_sample %>% count(Studienwahl, Studienwahl_Sonstiges)
+# 
+# # print("--- Formale Bildung ---")
+# demo_sample %>% count(Formale_Bildung)
+# 
+# # print("--- Big5 Erfahrung ---")
+# demo_sample %>% count(Big5_Erfahrung)
+# 
+# # print("--- Erfahrung mit Auswahlprozessen ---")
+# demo_sample %>% count(Auswahlprozesse)
 
 ################################################################################
 # 6. ICC-BERECHNUNGEN (Konsistenz)
@@ -240,7 +244,7 @@ library(lme4)
 merkmale <- c("geschaetzte_Extraversion", "geschaetzter_Neurotizismus", "geschaetzte_Gewissenhaftigkeit", "geschaetzte_Vertraeglichkeit", "geschaetzte_Offenheit", "geschaetzer_IQ")
 
 # --- Globale ICCs ---
-icc_ergebnisse <- list()
+icc_ergebnisse_s1 <- list()
 for (merkmal in merkmale) {
   rater_matrix <- final_data %>%
     select(CASE, lebenslauf_id, !!sym(merkmal)) %>%
@@ -248,7 +252,7 @@ for (merkmal in merkmale) {
     select(-lebenslauf_id)
   
   icc_berechnung <- ICC(rater_matrix, missing = TRUE)
-  icc_ergebnisse[[merkmal]] <- icc_berechnung$results
+  icc_ergebnisse_s1[[merkmal]] <- icc_berechnung$results
 }
 
 icc_average <- function(icc2, k) {
@@ -264,41 +268,41 @@ required_raters <- function(icc2, target = .90) {
 # ==============================================================================
 
 # ICC-Tabelle für die Extraversion
-print("--- ERGEBNIS EXTRAVERSION ---")
-print(icc_ergebnisse[["geschaetzte_Extraversion"]])
+# print("--- ERGEBNIS EXTRAVERSION ---")
+# print(icc_ergebnisse_s1[["geschaetzte_Extraversion"]])
 
-icc_average(icc_ergebnisse[["geschaetzte_Extraversion"]]$ICC[2], average_raters_per_cv)
-required_raters(icc_ergebnisse[["geschaetzte_Extraversion"]]$ICC[2], 0.90)
+# icc_average(icc_ergebnisse_s1[["geschaetzte_Extraversion"]]$ICC[2], average_raters_per_cv)
+# required_raters(icc_ergebnisse_s1[["geschaetzte_Extraversion"]]$ICC[2], 0.90)
 
 # ICC-Tabelle für den Neurotizismus
-print("--- ERGEBNIS NEUROTIZISMUS ---")
-print(icc_ergebnisse[["geschaetzter_Neurotizismus"]])
-icc_average(icc_ergebnisse[["geschaetzter_Neurotizismus"]]$ICC[2], average_raters_per_cv)
-required_raters(icc_ergebnisse[["geschaetzter_Neurotizismus"]]$ICC[2], 0.90)
+# print("--- ERGEBNIS NEUROTIZISMUS ---")
+# print(icc_ergebnisse_s1[["geschaetzter_Neurotizismus"]])
+# icc_average(icc_ergebnisse_s1[["geschaetzter_Neurotizismus"]]$ICC[2], average_raters_per_cv)
+# required_raters(icc_ergebnisse_s1[["geschaetzter_Neurotizismus"]]$ICC[2], 0.90)
 
 # ICC-Tabelle für die Gewissenhaftigkeit
-print("--- ERGEBNIS Gewissenhaftigkeit ---")
-print(icc_ergebnisse[["geschaetzte_Gewissenhaftigkeit"]])
-icc_average(icc_ergebnisse[["geschaetzte_Gewissenhaftigkeit"]]$ICC[2], average_raters_per_cv)
-required_raters(icc_ergebnisse[["geschaetzte_Gewissenhaftigkeit"]]$ICC[2], 0.90)
+# print("--- ERGEBNIS Gewissenhaftigkeit ---")
+# print(icc_ergebnisse_s1[["geschaetzte_Gewissenhaftigkeit"]])
+# icc_average(icc_ergebnisse_s1[["geschaetzte_Gewissenhaftigkeit"]]$ICC[2], average_raters_per_cv)
+# required_raters(icc_ergebnisse_s1[["geschaetzte_Gewissenhaftigkeit"]]$ICC[2], 0.90)
 
 # ICC-Tabelle für die Verträglichkeit
-print("--- ERGEBNIS VERTRÄGLICHKEIT ---")
-print(icc_ergebnisse[["geschaetzte_Vertraeglichkeit"]])
-icc_average(icc_ergebnisse[["geschaetzte_Vertraeglichkeit"]]$ICC[2], average_raters_per_cv)
-required_raters(icc_ergebnisse[["geschaetzte_Vertraeglichkeit"]]$ICC[2], 0.90)
+# print("--- ERGEBNIS VERTRÄGLICHKEIT ---")
+# print(icc_ergebnisse_s1[["geschaetzte_Vertraeglichkeit"]])
+# icc_average(icc_ergebnisse_s1[["geschaetzte_Vertraeglichkeit"]]$ICC[2], average_raters_per_cv)
+# required_raters(icc_ergebnisse_s1[["geschaetzte_Vertraeglichkeit"]]$ICC[2], 0.90)
 
 # ICC-Tabelle für die Offenheit
-print("--- ERGEBNIS OFFENHEIT ---")
-print(icc_ergebnisse[["geschaetzte_Offenheit"]])
-icc_average(icc_ergebnisse[["geschaetzte_Offenheit"]]$ICC[2], average_raters_per_cv)
-required_raters(icc_ergebnisse[["geschaetzte_Offenheit"]]$ICC[2], 0.90)
+# print("--- ERGEBNIS OFFENHEIT ---")
+# print(icc_ergebnisse_s1[["geschaetzte_Offenheit"]])
+# icc_average(icc_ergebnisse_s1[["geschaetzte_Offenheit"]]$ICC[2], average_raters_per_cv)
+# required_raters(icc_ergebnisse_s1[["geschaetzte_Offenheit"]]$ICC[2], 0.90)
 
 # ICC-Tabelle für den IQ
-print("--- ERGEBNIS IQ ---")
-print(icc_ergebnisse[["geschaetzer_IQ"]])
-icc_average(icc_ergebnisse[["geschaetzer_IQ"]]$ICC[2], average_raters_per_cv)
-required_raters(icc_ergebnisse[["geschaetzer_IQ"]]$ICC[2], 0.90)
+# print("--- ERGEBNIS IQ ---")
+# print(icc_ergebnisse_s1[["geschaetzer_IQ"]])
+# icc_average(icc_ergebnisse_s1[["geschaetzer_IQ"]]$ICC[2], average_raters_per_cv)
+# required_raters(icc_ergebnisse_s1[["geschaetzer_IQ"]]$ICC[2], 0.90)
 
 # # --- ICCs für Gruppenvergleiche (Beispiel: Extraversion) ---
 # # Hinweis: Gemäß Kommentar ist Code 2 = Psychologie
@@ -307,36 +311,36 @@ required_raters(icc_ergebnisse[["geschaetzer_IQ"]]$ICC[2], 0.90)
 # 
 # # Psychologie
 # matrix_psy <- icc_data %>% filter(Fachgruppe == "Psychologie") %>% select(CASE, lebenslauf_id, geschaetzte_Extraversion) %>% pivot_wider(names_from = CASE, values_from = geschaetzte_Extraversion) %>% select(-lebenslauf_id)
-# print("--- ICC EXTRAVERSION (PSYCHOLOGIE) ---"); print(ICC(matrix_psy, missing = TRUE)$results)
+# # print("--- ICC EXTRAVERSION (PSYCHOLOGIE) ---"); # print(ICC(matrix_psy, missing = TRUE)$results)
 # 
 # # Andere Fächer
 # matrix_andere <- icc_data %>% filter(Fachgruppe == "Anderes Fach") %>% select(CASE, lebenslauf_id, geschaetzte_Extraversion) %>% pivot_wider(names_from = CASE, values_from = geschaetzte_Extraversion) %>% select(-lebenslauf_id)
-# print("--- ICC EXTRAVERSION (ANDERES FACH) ---"); print(ICC(matrix_andere, missing = TRUE)$results)
+# # print("--- ICC EXTRAVERSION (ANDERES FACH) ---"); # print(ICC(matrix_andere, missing = TRUE)$results)
 # 
 # # Big5-Erfahrung (Code 1 = Ja)
 # icc_big5_data <- final_data %>% mutate(Big5_Gruppe = if_else(Big5_Erfahrung == 1, "Mit Erfahrung", "Ohne Erfahrung"))
 # 
 # matrix_big5_ja <- icc_big5_data %>% filter(Big5_Gruppe == "Mit Erfahrung") %>% select(CASE, lebenslauf_id, geschaetzte_Extraversion) %>% pivot_wider(names_from = CASE, values_from = geschaetzte_Extraversion) %>% select(-lebenslauf_id)
-# print("--- ICC EXTRAVERSION: MIT BIG5-ERFAHRUNG ---"); print(ICC(matrix_big5_ja, missing = TRUE)$results)
+# # print("--- ICC EXTRAVERSION: MIT BIG5-ERFAHRUNG ---"); # print(ICC(matrix_big5_ja, missing = TRUE)$results)
 # 
 # matrix_big5_nein <- icc_big5_data %>% filter(Big5_Gruppe == "Ohne Erfahrung") %>% select(CASE, lebenslauf_id, geschaetzte_Extraversion) %>% pivot_wider(names_from = CASE, values_from = geschaetzte_Extraversion) %>% select(-lebenslauf_id)
-# print("--- ICC EXTRAVERSION: OHNE BIG5-ERFAHRUNG ---"); print(ICC(matrix_big5_nein, missing = TRUE)$results)
+# # print("--- ICC EXTRAVERSION: OHNE BIG5-ERFAHRUNG ---"); # print(ICC(matrix_big5_nein, missing = TRUE)$results)
 
 ################################################################################
 # 7. KORRELATIONEN (Akkuratheit)
 ################################################################################
 
 # --- Globale Akkuratheit (Signifikanztests) ---
-print("--- Signifikanztests Globale Korrelationen ---")
-accuracy_cor_extra <- cor.test(final_data$geschaetzte_Extraversion, final_data$wahre_Extraversion)
-accuracy_cor_vertr <- cor.test(final_data$geschaetzte_Vertraeglichkeit, final_data$wahre_Vertraeglichkeit)
-accuracy_cor_gewiss <- cor.test(final_data$geschaetzte_Gewissenhaftigkeit, final_data$wahre_Gewissenhaftigkeit)
-accuracy_cor_neuro <- cor.test(final_data$geschaetzter_Neurotizismus, final_data$wahrer_Neurotizismus)
-accuracy_cor_offen <- cor.test(final_data$geschaetzte_Offenheit, final_data$wahre_Offenheit)
-accuracy_cor_iq <- cor.test(final_data$geschaetzer_IQ, final_data$wahre_Intelligenz)
+# print("--- Signifikanztests Globale Korrelationen ---")
+accuracy_cor_extra_s1 <- cor.test(final_data$geschaetzte_Extraversion, final_data$wahre_Extraversion)
+accuracy_cor_vertr_s1 <- cor.test(final_data$geschaetzte_Vertraeglichkeit, final_data$wahre_Vertraeglichkeit)
+accuracy_cor_gewiss_s1 <- cor.test(final_data$geschaetzte_Gewissenhaftigkeit, final_data$wahre_Gewissenhaftigkeit)
+accuracy_cor_neuro_s1 <- cor.test(final_data$geschaetzter_Neurotizismus, final_data$wahrer_Neurotizismus)
+accuracy_cor_offen_s1 <- cor.test(final_data$geschaetzte_Offenheit, final_data$wahre_Offenheit)
+accuracy_cor_iq_s1 <- cor.test(final_data$geschaetzer_IQ, final_data$wahre_Intelligenz)
 
 # # --- Akkuratheitsvergleich nach Gruppen ---
-# print("--- Korrelationen nach Fachgruppe (2 = Psychologie) ---")
+# # print("--- Korrelationen nach Fachgruppe (2 = Psychologie) ---")
 # final_data %>%
 #   mutate(Fachgruppe = if_else(Studienwahl == 2, "Psychologie", "Anderes Fach")) %>% 
 #   group_by(Fachgruppe) %>% 
@@ -350,7 +354,7 @@ accuracy_cor_iq <- cor.test(final_data$geschaetzer_IQ, final_data$wahre_Intellig
 #     r_IQ = cor(geschaetzer_IQ, wahre_Intelligenz, use = "complete.obs")
 #   )
 # 
-# print("--- Korrelationen nach Geschlecht ---")
+# # print("--- Korrelationen nach Geschlecht ---")
 # final_data %>%
 #   group_by(Geschlecht) %>% 
 #   summarise(
@@ -377,27 +381,57 @@ average_data_per_cv <- final_data %>%
   ) %>% 
   ungroup() 
   
-average_data_cors <- average_data_per_cv %>% 
+average_data_cors_s1 <- average_data_per_cv %>% 
   summarise(
-    r_Extraversion       = cor(mean_Extraversion, wahre_Extraversion, use = "complete.obs"),
-    r_Vertraeglichkeit   = cor(mean_Vertraeglichkeit, wahre_Vertraeglichkeit, use = "complete.obs"),
-    r_Gewissenhaftigkeit = cor(mean_Gewissenhaftigkeit, wahre_Gewissenhaftigkeit, use = "complete.obs"),
-    r_Neurotizismus      = cor(mean_Neurotizismus, wahrer_Neurotizismus, use = "complete.obs"),
-    r_Offenheit          = cor(mean_Offenheit, wahre_Offenheit, use = "complete.obs"),
-    r_IQ                 = cor(mean_IQ, wahre_Intelligenz, use = "complete.obs")
+    Extraversion = sprintf(
+      "%.2f [%.2f, %.2f]",
+      cor.test(mean_Extraversion, wahre_Extraversion)$estimate,
+      cor.test(mean_Extraversion, wahre_Extraversion)$conf.int[1],
+      cor.test(mean_Extraversion, wahre_Extraversion)$conf.int[2]
+    ),
+    Vertraeglichkeit = sprintf(
+      "%.2f [%.2f, %.2f]",
+      cor.test(mean_Vertraeglichkeit, wahre_Vertraeglichkeit)$estimate,
+      cor.test(mean_Vertraeglichkeit, wahre_Vertraeglichkeit)$conf.int[1],
+      cor.test(mean_Vertraeglichkeit, wahre_Vertraeglichkeit)$conf.int[2]
+    ),
+    Gewissenhaftigkeit = sprintf(
+      "%.2f [%.2f, %.2f]",
+      cor.test(mean_Gewissenhaftigkeit, wahre_Gewissenhaftigkeit)$estimate,
+      cor.test(mean_Gewissenhaftigkeit, wahre_Gewissenhaftigkeit)$conf.int[1],
+      cor.test(mean_Gewissenhaftigkeit, wahre_Gewissenhaftigkeit)$conf.int[2]
+    ),
+    Neurotizismus = sprintf(
+      "%.2f [%.2f, %.2f]",
+      cor.test(mean_Neurotizismus, wahrer_Neurotizismus)$estimate,
+      cor.test(mean_Neurotizismus, wahrer_Neurotizismus)$conf.int[1],
+      cor.test(mean_Neurotizismus, wahrer_Neurotizismus)$conf.int[2]
+    ),
+    Offenheit = sprintf(
+      "%.2f [%.2f, %.2f]",
+      cor.test(mean_Offenheit, wahre_Offenheit)$estimate,
+      cor.test(mean_Offenheit, wahre_Offenheit)$conf.int[1],
+      cor.test(mean_Offenheit, wahre_Offenheit)$conf.int[2]
+    ),
+    IQ = sprintf(
+      "%.2f [%.2f, %.2f]",
+      cor.test(mean_IQ, wahre_Intelligenz)$estimate,
+      cor.test(mean_IQ, wahre_Intelligenz)$conf.int[1],
+      cor.test(mean_IQ, wahre_Intelligenz)$conf.int[2]
+    )
   )
 
-m1 <- lm(wahre_Intelligenz ~ education, data = average_data_per_cv)
+m1_s1 <- lm(wahre_Intelligenz ~ education, data = average_data_per_cv)
 
-m2 <- lm(wahre_Intelligenz ~ mean_IQ + education, data = average_data_per_cv)
+m2_s1 <- lm(wahre_Intelligenz ~ mean_IQ + education, data = average_data_per_cv)
 
-model_comp <- anova(m1, m2)
+model_comp_s1 <- anova(m1_s1, m2_s1)
 
 ################################################################################
 # DESKRIPTIVE STATISTIKEN DER BEWERTETEN LEBENS LÄUFE (WAHRE WERTE)
 ################################################################################
 
-print("--- Wahre Ausprägungen der Big 5 & IQ der Lebensläufe ---")
+# print("--- Wahre Ausprägungen der Big 5 & IQ der Lebensläufe ---")
 
   # 1. Datensatz auf die Ebene der Lebensläufe reduzieren (jeder LL nur 1x)
 lebenslauf_sample <- final_data %>% 
@@ -413,7 +447,7 @@ lebenslauf_deskriptiv <- lebenslauf_sample %>%
   )
 
 # Ergebnis anzeigen
-print(lebenslauf_deskriptiv)
+# print(lebenslauf_deskriptiv)
 
 lebenslauf_tabelle <- lebenslauf_sample %>%
   select(starts_with("wahre_"), wahrer_Neurotizismus) %>%
@@ -426,5 +460,5 @@ lebenslauf_tabelle <- lebenslauf_sample %>%
     Max        = round(max(Wert, na.rm = TRUE), 2)
   )
 
-print(lebenslauf_tabelle)
+# print(lebenslauf_tabelle)
 # Mean Score of 111 (SD = 22.6) corresponds to IQ of 106 (see Sadus et al., 2026)
