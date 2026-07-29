@@ -170,7 +170,7 @@ something about needing to figure out whether this can be done reliably and with
 here maybe (or one above) the previous findings
 
 the present study aims to do this better in the following ways:
-- use CVs from the general population
+- use resumes from the general population
 - also assess intelligence
 - large sample, no training, real "zero shot" estimation
 
@@ -204,7 +204,7 @@ true_values_clean <- true_values[-1, ] %>%
     )
   )
 ```
-We recruited a total of `r nrow(true_values_clean)` participants ($M_{age} =$ `r mean(as.numeric(true_values_clean$age)) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(true_values_clean$age)) %>% apa_num()`, `r mean(true_values_clean$gender == "weiblich") %>% print_freq_percent()` female) who provided anonymized CVs to be rated. These participants were the subsample of a larger study collected at Heidelberg University who agreed to share their CV for the current work.
+We recruited a total of `r nrow(true_values_clean)` participants ($M_{age} =$ `r mean(as.numeric(true_values_clean$age)) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(true_values_clean$age)) %>% apa_num()`, `r mean(true_values_clean$gender == "weiblich") %>% print_freq_percent()` female) who provided anonymized resumes to be rated. These participants are a subsample of a larger study collected at Heidelberg University with an unrelated research question.
 
 ```{r}
 s1_data <- read_excel("data/data_big-five-lebenslauf_2026-06-01_14-23.xlsx")
@@ -214,90 +214,41 @@ s2_data <- read_excel("data/data_cv_bewertung_2026-07-28_15-48.xlsx")
 
 For Study 1, we recruited participants from a) the student population of Heidelberg University and b) an internet-based recruitment of German speakers on the platform Reddit. In total, we recruited `r nrow(s1_data)` participants ($M_{age} =$ `r mean(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s1_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s1_data$SD01 == "1", na.rm = TRUE) %>% print_freq_percent()` female).
 
-For Study 2, we recruited participants from a private university in Heidelberg (FOM). Here, students typically work in addition to their studies.. In total, we recruited `r nrow(s2_data)` participants ($M_{age} =$ `r mean(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s2_data$SD01 == "1", na.rm = TRUE) %>% print_freq_percent()` female).
+For Study 2, we recruited participants from a private university in Heidelberg (FOM). Here, students typically work in addition to their studies. In total, we recruited `r nrow(s2_data)` participants ($M_{age} =$ `r mean(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s2_data$SD01 == "1", na.rm = TRUE) %>% print_freq_percent()` female).
 
 ## Materials
-To assess the personality of participants providing their CV, we used the german version of the Big Five Inventory 2 (BFI-2) [CITATION]. The BFI-2 consists of 12 likert-scale items per factor, 60 items total. It has previously shown consistently good reliability ($\alpha$ > 0.8) and validity [CITATION].
+To assess the personality of participants providing their resume, we used the german version of the Big Five Inventory 2 (BFI-2) [@dannerDeutscheVersionBig2016]. The BFI-2 consists of 12 likert-scale items per factor, 60 items total. It has previously shown consistently good reliability ($\alpha$ > 0.8) and validity [@dannerDeutscheVersionBig2016].
 
-To assess the intelligence of participants providing their CV, we used the Intelligence-Structure-Test (IST) 2000-R [CITATION]. We only used the basic module ("Grundmodul") to assess fluid intelligence. This module consists of 9 subtests in three domains: verbal, numeric, and figural. It has demonstrated very good reliability $\alpha > 0.95$ and validity [CITATION liepmann].
+To assess the intelligence of participants providing their resume, we used the Intelligence-Structure-Test (IST) 2000-R [@liepmannIST]. We only used the basic module ("Grundmodul") to assess fluid intelligence. This module consists of 9 subtests in three domains: verbal, numeric, and figural. It has demonstrated very good reliability $\alpha > 0.95$ and validity [@liepmannIST].
 
-The participants voluntarily provided their CVs and were instructed to provide them "as is" without adhering to a special format provided by the authors. CVs were subsequently anonymyzed by redacting any identifying information such as names, date of birth, company names, publication titles, or very specific job descriptions. In total, we received 25 CVs.
+The participants voluntarily provided their resumes and were instructed to provide them "as is" without adhering to a special format provided by the authors. Resumes were subsequently anonymyzed by redacting any identifying information such as names, date of birth, company names, publication titles, or very specific job descriptions. In total, we received 25 resumes.
 
 ## Procedure
-The participants providing their CV were part of a larger study (N = 200) that assessed the relationship between mental speed and intelligence. They completed the study in two sessions. In the first session, participants first completed memory tasks using EEG for about 2 hours, then they completed a questionnaire, including the BFI-2, finally, they completed 4 short working-memory tasks. The second session was conducted on another day by a trained experimenter and consisted of the IST, which required 90 minutes and then the Advanced Progressive Matrices [CITATION], which required 50 minutes. Results of the APM are not reported here. Following completion of the second session, participants were emailed and informed about the aim of the present study, the extent to which their CVs would be used and could volunteer to provide a CV which would be anonymized.
+The participants providing their resume were part of a larger study (N = 200) that assessed the relationship between mental speed and intelligence. The full study consisted of two sessions. In the first session, participants first completed memory tasks while recording EEG for about 2 hours, then they completed a set of questionnaires, including the BFI-2, finally, they completed 4 short working-memory tasks. The second session was conducted on another day by a trained experimenter and consisted of the IST, which required 90 minutes to complete and Raven's Advanced Progressive Matrices [@raven1962advanced], which required 50 minutes to complete. Results of the APM are not reported here. Following completion of the second session, participants were emailed and informed about the aim of the present study, the extent to which their resumes would be used and could volunteer to provide a resume which would be anonymized.
 
-In Study 1, participants completed an online-survey on the hosting platform SoSciSurvey [CITATION]. They gave informed consent, and were asked to provide demographic information, experience with the Big Five personality model (yes/no) and experience with selection processes including CVs (scale of 1 - "no experience"  to 5 - "a lot of experience"). Then, we instructed the participants to inspect five CVs carefully and provide a rating of the person's personality. Personality raters were given on sliders from 0 to 100 with no numeric labels but verbal labels on both ends of the slider. These labels described the personality dimensions to be rated (see Table \@ref(tab:rating-scale-anchors)).
+In Study 1, participants completed an online-survey on the hosting platform SoSciSurvey [@leinert2024sosci]. The procedure was identical for Study 2, except that participants completed another, unrelated survey for about 10 minutes prior to the presented survey. 
 
-```{r rating-scale-anchors}
-rating_labels <- data.frame(
-  Dimension = c(
-    "Extraversion",
-    "Emotional Stability",
-    "Conscientiousness",
-    "Agreeableness",
-    "Openness",
-    "Intelligence"
-  ),
-  Left_Anchor_German = c(
-    "zurückhaltend, reserviert",
-    "selbstsicher, ruhig",
-    "nachlässig, unsorgfältig",
-    "wenig kooperativ, konfrontativ",
-    "konservativ, vorsichtig",
-    "wenig intelligent"
-  ),
-  Right_Anchor_German = c(
-    "gesellig, kontaktfreudig, sozial",
-    "emotional, verletzlich",
-    "zuverlässig, sorgfältig",
-    "kooperativ, freundlich",
-    "neugierig, erfinderisch",
-    "sehr intelligent"
-  ),
-  Left_Anchor_English = c(
-    "reserved, withdrawn",
-    "self-confident, calm",
-    "careless, negligent",
-    "uncooperative, confrontational",
-    "conservative, cautious",
-    "not very intelligent"
-  ),
-  Right_Anchor_English = c(
-    "sociable, outgoing, social",
-    "emotional, vulnerable",
-    "reliable, conscientious",
-    "cooperative, friendly",
-    "curious, inventive",
-    "very intelligent"
-  ),
-  check.names = FALSE
-)
+First, participants gave informed consent, and subsequently were asked to provide demographic information, experience with the Big Five personality model (yes/no), and experience with selection processes including resumes (scale of 1 - "no experience"  to 5 - "a lot of experience"). Then, we instructed the participants to inspect five resumes carefully and provide a rating of the person's personality. Personality raters were given on sliders from 0 to 100 with no numeric labels but verbal labels in German on both ends of the slider (e.g. "reserved, withdrawn" vs. sociable, outgoing, social" for extraversion). These labels described the personality dimensions to be rated (for a complete overview, see Table A2).
 
-papaja::apa_table(
-  rating_labels,
-  caption = "Slider anchors used for personality and intelligence ratings."
-)
-```
+Each resume was presented on one page with rating sliders and a multiple-choice question below asking which criteria they used to make their decision (e.g. "Education", "Work experience and profile"). After participants rated 5 random resumes, they were asked whether they wanted to continue and rate five more resumes. This was possible up to a total of 15 resumes rated by each participant. 
 
-Each CV was presented by itself with the rating sliders below and multi-choice question asking which criteria they used to make their decision (e.g. "Education", "Work experience and profile"). After participants rated 5 random CVs, they were asked whether they wanted to continue and rate five more CVs. This was possible up to a total of 15 CVs rated by each participant. 
-
-Finally, participants indicated whether they payed attention during the survey and whether all of the CVs were presented without issues. Students of the University or the FOM could indicate that they wanted to receive course credits. No other rewards were issued. The median completion time for participants who viewed only five CVs was around 10 minutes.
-
-The procedure was identical for Study 2, except that participants completed another, unrelated survey for about 10 minutes prior to the presented survey.
+Finally, participants indicated whether they payed attention during the survey and whether all of the resumes were presented without issues. University students received course credits. No other rewards were issued. The median completion time for participants who viewed only five resumes was around 10 minutes.
 
 ## Analysis
-We estimated the reliability of ratings for each dimension (Big Five and Intelligence) separately using ICC(2) as implemented in the R package `psych` [@R-psych] to assess the absolute agreement of a single random rater. Based on this assessment and the Spearman-Brown prophecy formula, we provide the necessary number of raters whose average rating would achieve a reliability of 0.90. 
+We estimated the reliability of ratings for each dimension (Big Five and Intelligence) separately using ICC(2, 1) as implemented in the R package `psych` [@R-psych] to assess the absolute agreement of a single random rater. Based on this assessment and the Spearman-Brown prophecy formula, we extrapolated the necessary number of raters whose average rating would achieve a reliability of 0.90.
 
-We estimated the accuracy of ratings in two ways. First, to assess the accuracy of only a single rater, we calculated the correlation across all CVs and raters between the rater's judgment and the underlying Big Five or intelligence score. Second, we average across all judgments for each CV and then calculated the correlation between average rating and underlying score.
+We estimated the accuracy of ratings in two ways. First, to assess the accuracy of only a single rater, we calculated the correlation across all resumes and raters between the rater's judgment and the underlying Big Five or intelligence score. Second, we averaged across all judgments for each resume and then calculated the correlation between average rating and underlying score.
 
 # Results
+
 ```{r}
 source("scripts/final_code.R")
 source("scripts/final_code_s2.R")
 ```
-We removed participants if they indicated that they were somewhat strongly or very strongly distracted during completion of the survey. Additionally, we removed participants who completed the entire survey in less than half of median completion time for participants who rated five CVs. Following data exclusion, $N =$ `r n_raters_final_cleaned_s1` participants remained in Study 1 and $N =$ `r n_raters_final_cleaned_s2` participants in Study 2. On average, each CV was judged by `r average_raters_per_cv_s1` participants in Study 1 and `r average_raters_per_cv_s2` participants in Study 2.
 
-We provide an overview of descriptive information in Table A1 in the appendix.
+All analysis were conducted using `r r_citations$r`. `r r_citations$pkgs`. All code and data necessary to reproduce this manuscript using R-markdown is available at **PROVIDE DOI here**.
+
+We removed participants if they indicated that they were somewhat strongly or very strongly distracted during completion of the survey. Additionally, we removed participants who completed the entire survey in less than half of median completion time for participants who rated five resumes. Following data exclusion, $N =$ `r n_raters_final_cleaned_s1` participants remained in Study 1 and $N =$ `r n_raters_final_cleaned_s2` participants in Study 2. On average, each resume was judged by `r average_raters_per_cv_s1` participants in Study 1 and `r average_raters_per_cv_s2` participants in Study 2. We provide an overview of descriptive information in Table A2 in the appendix.
 
 ```{r rel-overview-tab}
 # Consolidate reliability estimates
@@ -333,10 +284,19 @@ for (i in seq_along(merkmale)){
   overview_reliability_table$required_2[i] = required_s2
 }
 
+overview_reliability_table_print <- overview_reliability_table %>% 
+  rename(
+    "Construct" = construct,
+    "ICC (Study 1)" = study_1,
+    "ICC (Study 2)" = study_2,
+    "k required (Study 1)" = required_1,
+    "k required (Study 2)" = required_2
+  )
+
 papaja::apa_table(
-  overview_reliability_table,
+  overview_reliability_table_print,
   caption = "Interrater reliability of resume based judgments for big five and intelligence",
-  note = "SOMETHING ABOUT THE TABLE COLUMN NAMES"
+    note = "Interrater reliability was estimated using the two-way random-effects intraclass correlation coefficient for absolute agreement, ICC(2,1). Values are reported with 95% confidence intervals. *k* required denotes the estimated number of raters required for the average rating to achieve a reliability of at least .90 according to the Spearman–Brown prophecy formula."
 )
 ```
 
@@ -384,18 +344,35 @@ overview_accuracy_table = data.frame(
   )
 )
 
+overview_accuracy_table_print <- overview_accuracy_table %>% 
+  rename(
+    "Single-rater r (Study 1)" = study_1,
+    "Single-rater r (Study 2)" = study_2,
+    "Mean-rating r (Study 1)" = avg_study_1,
+    "Mean-rating r (Study 2)" = avg_study_2
+  )
+
 papaja::apa_table(
-  overview_accuracy_table,
+  overview_accuracy_table_print,
   caption = "Accuracy of resume based judgments for big five and intelligence",
-  note = "SOMETHING ABOUT THE TABLE COLUMN NAMES. PROVIDE THE N RATERS AND N CVS HERE ALSO"
+  note = "Values are Pearson correlations (95% CIs) between resume-based judgments and the corresponding criterion scores (BFI-2 and IST 2000-R). Single-rater accuracy is based on individual judgments; mean-rating accuracy is based on ratings averaged across raters for each resume."
 )
 ```
 Table \@ref(tab:acc-overview-tab) provides an overview of the accuracy of resume judgments. Highest accuracy was observed for intelligence (Study 1: `r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()`, Study 2: `r overview_accuracy_table$study_2[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()`), followed by neuroticism (Study 1: `r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Neuroticism")] %>% print_cor()`), Study 2: (`r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Neuroticism")] %>% print_cor()`). The lowest accuracy was observed for openness in both studies (Study 1: `r overview_accuracy_table$study_1[which(overview_accuracy_table$construct == "Openness")] %>% print_cor()`, Study 2: `r overview_accuracy_table$study_2[which(overview_accuracy_table$construct == "Openness")] %>% print_cor()`).
 
-Accuracy improved for all judgments after averaging across raters for each CV. Here, the average intelligence rating correlated with actual intelligence at `r overview_accuracy_table$avg_study_1[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` in Study 1 and `r overview_accuracy_table$avg_study_2[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` in Study 2. Notably, intelligence judgments based on the resume provided incremental validity on actual intelligence over pure educational status of the resume's creator. Additional details on these models can be found in the appendix.
+Accuracy improved for all judgments after averaging across raters for each resume. Here, the average intelligence rating correlated with actual intelligence at `r overview_accuracy_table$avg_study_1[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` in Study 1 and `r overview_accuracy_table$avg_study_2[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` in Study 2. Notably, intelligence judgments based on the resume provided incremental validity on actual intelligence over pure educational status of the resume's creator. Additional details on these models can be found in the appendix.
 
 # Discussion
 
+Across two independent samples, we found that untrained raters showed low interrater reliability when judging personality traits from resumes. Consistent with this, the accuracy of single-rater personality judgments was generally low, suggesting that resume-based personality impressions are unlikely to provide sufficiently valid information for personnel selection. In contrast, intelligence judgments showed higher reliability and were strongly associated with objectively measured intelligence. 
+
+Averaging judgments across raters substantially improved both reliability and predictive accuracy for all constructs. Objectively measured scores correlated with averaged ratings of intelligence around $r > 0.75$ and personality up to $r = 0.53$. These findings indicate that resumes contain systematic information about applicants' personality and intelligence. Instead, the limitation in accuracy appears to lie less in the information contained in resumes and rather in single raters' ability to extract it reliably. 
+
+This raises the possibility that training recruiters to evaluate resumes more systematically may improve judgment accuracy [SEEE ALSO CITATION WHERE THEY DID THAT]. Similarly, recent advances in machine learning and large language models suggest that automated systems may be able to extract personality- and intelligence-related information from resumes more consistently than individual human raters [CITATION], representing a promising direction for future research.
+
+A major strength of the present work is the use of real resumes paired with validated measures of both personality and intelligence. At the same time, the resume sample was intentionally heterogeneous and covered applicants with diverse educational and occupational backgrounds. Consequently, it remains unclear to what extent the present findings generalize to personnel selection within a single profession or for a specific job advertisement, where resumes may be considerably more homogeneous. Furthermore, our participants were untrained laypersons rather than professional recruiters. Future studies should investigate avenues such as recruiter training or machine learning to improve judgment quality.
+
+Taken together, our findings suggest that first impressions based solely on resumes should be interpreted with caution, particularly when making inferences about applicants' personality. While resumes appear to contain meaningful information about intelligence, reliable personality assessment is unlikely to be achieved through unaided human judgment alone.
 
 <!-- References -->
 \newpage
@@ -405,11 +382,136 @@ Accuracy improved for all judgments after averaging across raters for each CV. H
 
 # Appendix
 
+```{r rating-scale-anchors}
+rating_labels <- data.frame(
+  Construct = c(
+    "Extraversion",
+    "Neuroticism",
+    "Conscientiousness",
+    "Agreeableness",
+    "Openness",
+    "Intelligence"
+  ),
+  `Left Anchor (German)` = c(
+    "zurückhaltend, reserviert",
+    "selbstsicher, ruhig",
+    "nachlässig, unsorgfältig",
+    "wenig kooperativ, konfrontativ",
+    "konservativ, vorsichtig",
+    "wenig intelligent"
+  ),
+  `Right Anchor (German)` = c(
+    "gesellig, kontaktfreudig, sozial",
+    "emotional, verletzlich",
+    "zuverlässig, sorgfältig",
+    "kooperativ, freundlich",
+    "neugierig, erfinderisch",
+    "sehr intelligent"
+  ),
+  `Left Anchor (English)` = c(
+    "reserved, withdrawn",
+    "self-confident, calm",
+    "careless, negligent",
+    "uncooperative, confrontational",
+    "conservative, cautious",
+    "not very intelligent"
+  ),
+  `Right Anchor (English)` = c(
+    "sociable, outgoing, social",
+    "emotional, vulnerable",
+    "reliable, conscientious",
+    "cooperative, friendly",
+    "curious, inventive",
+    "very intelligent"
+  ),
+  check.names = FALSE
+)
+
+papaja::apa_table(
+  rating_labels,
+  caption = "Slider anchors used for personality and intelligence ratings.",
+  note = "Slider anchors were presented in German. English translation is only to improve readibility of the manuscript and not an authorative translation of slider anchors."
+)
+```
+
 ## Descriptive Information
+```{r descriptive-tab}
+overview_descriptives <- bind_rows(
+  lebenslauf_tabelle %>% mutate(Source = "True sample"),
+  avg_judgments_s1 %>% mutate(Source = "Study 1"),
+  avg_judgments_s2 %>% mutate(Source = "Study 2")
+) %>%
+  mutate(
+    Construct = case_when(
+      grepl("Extraversion", Merkmal) ~ "Extraversion",
+      grepl("Neurotizismus", Merkmal) ~ "Neuroticism",
+      grepl("Gewissenhaftigkeit", Merkmal) ~ "Conscientiousness",
+      grepl("Vertraeglichkeit", Merkmal) ~ "Agreeableness",
+      grepl("Offenheit", Merkmal) ~ "Openness",
+      grepl("IQ|Intelligenz", Merkmal) ~ "Intelligence"
+    )
+  ) %>%
+  transmute(
+    Construct,
+    Source,
+    Summary = sprintf("%.2f (%.2f), n = %d", Mittelwert, SD, n)
+  ) %>%
+  pivot_wider(
+    names_from = Source,
+    values_from = Summary
+  ) %>%
+  arrange(factor(
+    Construct,
+    levels = c(
+      "Extraversion",
+      "Neuroticism",
+      "Conscientiousness",
+      "Agreeableness",
+      "Openness",
+      "Intelligence"
+    )
+  ))
+
+papaja::apa_table(
+  overview_descriptives,
+  caption = "Descriptive statistics for personality and intelligence scores in the target sample and resume-based judgments across both studies.",
+  note = "Values are means with standard deviations in parentheses; the number of observations is reported after each value. Target-sample scores are based on self-reports (BFI-2) and performance on the IST 2000-R. Resume-based judgments were rescaled from the original 0–100 slider to a 1–5 scale to facilitate comparison with the BFI-2. Intelligence scores in the target sample represent the number of correctly solved items on the IST 2000-R. The average number of correctly solved items (111) corresponds to an IQ of 106."
+)
+```
+
 
 ## Testing incremental validity
-Something about the data
 
-something about the model
+To examine whether resume-based intelligence judgments provide information beyond educational attainment, we estimated two nested linear regression models using the average intelligence judgment for each resume. The analysis was conducted at the resume level (*N* = 25), with the criterion being the target person's intelligence score obtained from the IST 2000-R.
 
-something about model comparison, something about their R2, something about the result of model comparison test
+The baseline model included educational attainment as the sole predictor. The extended model additionally included the mean resume-based intelligence judgment.
+
+To evaluate the incremental validity of resume-based judgments, the two nested models were compared using an F-test. Model fit was summarized using the coefficient of determination ($R^2$) for each model. Incremental validity was assessed by the increase in explained variance ($\Delta R^2$) and the significance of the nested model comparison. A significant improvement in model fit indicates that resume-based intelligence judgments explain unique variance in intelligence beyond educational attainment alone.
+
+```{r, results = "asis", echo = FALSE}
+# Study 1
+m1_r2_s1 <- summary(m1_s1)$r.squared
+m2_r2_s1 <- summary(m2_s1)$r.squared
+comp_s1  <- anova(m1_s1, m2_s1)
+
+# Study 2
+m1_r2_s2 <- summary(m1_s2)$r.squared
+m2_r2_s2 <- summary(m2_s2)$r.squared
+comp_s2  <- anova(m1_s2, m2_s2)
+
+p_value_s1 <- comp_s1$`Pr(>F)`[2]
+p_value_s2 <- comp_s2$`Pr(>F)`[2]
+
+```
+
+### Study 1
+
+The baseline model, including educational attainment as the sole predictor, explained `r apa_num(m1_r2_s1 * 100, digits = 1)`% of the variance in intelligence ($R^2$ = `r apa_num(m1_r2_s1)`). Adding the mean resume-based intelligence judgment increased the explained variance to `r apa_num(m2_r2_s1 * 100, digits = 1)`% ($R^2$ = `r apa_num(m2_r2_s1)`), corresponding to an increase of $\Delta R^2 =$ `r apa_num(m2_r2_s1 - m1_r2_s1)`.
+
+The comparison of the nested models indicated that the extended model provided a significantly better fit than the baseline model *F*(`r comp_s1$Df[2]`, `r comp_s1$Res.Df[2]`) = `r apa_num(comp_s1$F[2])`, *p* `r papaja::apa_p(p_value_s1)`.
+
+### Study 2
+
+The baseline model, including educational attainment as the sole predictor, explained `r apa_num(m1_r2_s2 * 100, digits = 1)`% of the variance in intelligence ($R^2$ = `r apa_num(m1_r2_s2)`). Adding the mean resume-based intelligence judgment increased the explained variance to `r apa_num(m2_r2_s2 * 100, digits = 1)`% ($R^2$ = `r apa_num(m2_r2_s2)`), corresponding to an increase of $\Delta R^2 =$ `r apa_num(m2_r2_s2 - m1_r2_s2)`.
+
+The comparison of the nested models indicated that the extended model provided a significantly better fit than the baseline model *F*(`r comp_s2$Df[2]`, `r comp_s2$Res.Df[2]`) = `r apa_num(comp_s2$F[2])`, *p* `r papaja::apa_p(p_value_s2)`.

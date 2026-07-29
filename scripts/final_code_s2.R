@@ -122,7 +122,7 @@ final_data <- left_join(analysedatensatz, true_values_clean, by = "lebenslauf_id
 # --- Schritt 4: Transformation der Schätzer-Skala (0-100 zu 1-5) ---
 final_data <- final_data %>%
   mutate(across(
-    .cols = c(starts_with("geschaetzte_"), starts_with("geschaetzer_")),
+    .cols = c(starts_with("geschaetzte_"), starts_with("geschaetzter_"), starts_with("geschaetzer_")),
     .fns = ~ (.x / 25) + 1
   ))
 
@@ -452,7 +452,20 @@ lebenslauf_tabelle <- lebenslauf_sample %>%
     Mittelwert = round(mean(Wert, na.rm = TRUE), 2),
     SD         = round(sd(Wert, na.rm = TRUE), 2),
     Min        = round(min(Wert, na.rm = TRUE), 2),
-    Max        = round(max(Wert, na.rm = TRUE), 2)
+    Max        = round(max(Wert, na.rm = TRUE), 2),
+    n = n()
+  )
+
+avg_judgments_s2 <- final_data %>% 
+  select(starts_with("geschaet")) %>%
+  pivot_longer(cols = everything(), names_to = "Merkmal", values_to = "Wert") %>% 
+  group_by(Merkmal) %>% 
+  summarise(
+    Mittelwert = round(mean(Wert, na.rm = TRUE), 2),
+    SD         = round(sd(Wert, na.rm = TRUE), 2),
+    Min        = round(min(Wert, na.rm = TRUE), 2),
+    Max        = round(max(Wert, na.rm = TRUE), 2),
+    n = n()
   )
 
 # print(lebenslauf_tabelle)
