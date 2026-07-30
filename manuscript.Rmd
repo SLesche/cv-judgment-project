@@ -48,16 +48,16 @@ authornote: |
   Author Notes go here.
 
 abstract: |
-  Personality and intelligence are among the strongest predictors of job performance. The present study examined whether these characteristics can be assessed at an early stage of the hiring process using only applicants' CVs. To this end, we collected 25 CVs as used for application processes from members of the general population and measured their personality via the BFI-2 scale and general intelligence using the IST-2000-R. Subsequently, two indendent samples of 298 and 416 participants rated each applicant's personality and intelligence based solely on anonymized CVs.
+  Personality and intelligence are among the strongest predictors of job performance. The present study examined whether these characteristics can be assessed at an early stage of the hiring process using only applicants' resumes. To this end, we collected 25 resumes as used for application processes from members of the general population and measured their personality via the BFI-2 scale and general intelligence using the IST-2000-R. Subsequently, two indendent samples of 298 and 416 participants rated each applicant's personality and intelligence based solely on anonymized resumes.
 
-  Across both samples, personality ratings by individual raters showed low inter-rater reliability (ICC = .11 - .22) and weak associations with applicants' actual personality scores (r = .05 - .26). In contrast, intelligence ratings demonstrated higher inter-rater reliability (ICC = .35) and moderate predictive validity (r = .46). Averaging ratings across all raters for a given CV substantially improved reliability and increased predictive validity for both personality (up to r = .53) and intelligence (r = .77). 
+  Across both samples, personality ratings by individual raters showed low inter-rater reliability (ICC = .11 - .22) and weak associations with applicants' actual personality scores (r = .05 - .26). In contrast, intelligence ratings demonstrated higher inter-rater reliability (ICC = .35) and moderate predictive validity (r = .46). Averaging ratings across all raters for a given resume substantially improved reliability and increased predictive validity for both personality (up to r = .53) and intelligence (r = .77). 
 
-  These findings suggest that individual raters are generally unable to accurately infer personality from CVs, whereas intelligence can be estimated with somewhat greater accuracy. Importantly, the marked improvement obtained by aggregating ratings indicates that CVs contain systematic information about these traits that can be extracted more reliably through collective judgment. This raises the possibility that better-trained recruiters or algorithmic approaches could leverage such information to provide an early assessment of important applicant characteristics during the selection process. 
+  These findings suggest that individual raters are generally unable to accurately infer personality from resumes, whereas intelligence can be estimated with somewhat greater accuracy. Importantly, the marked improvement obtained by aggregating ratings indicates that resumes contain systematic information about these traits that can be extracted more reliably through collective judgment. This raises the possibility that better-trained recruiters or algorithmic approaches could leverage such information to provide an early assessment of important applicant characteristics during the selection process. 
 
 keywords          : "personality, resume, intelligence, SOMETHING ELSE?"
 # wordcount         : "X"
 
-bibliography      : ["r-references.bib", "cv-judgment.bib"] # put your ref files here
+bibliography      : ["r-references.bib", "cv-judgment.bib", "valeria-refs.bib"] # put your ref files here
 
 floatsintext      : yes # for pics in text
 linenumbers       : no
@@ -138,7 +138,6 @@ r_citations <- cite_r(
 
 ```
 
-
 ```{r setup-print-percent}
 print_percent <- function(percent){
   apa_msg = papaja::apa_num(percent)
@@ -167,8 +166,6 @@ print_icc <- function(icc){
 }
 ```
 
-<!-- Here we can incorporate child markdown-documents as the separate parts -->
-# Introduction
 something about the validity of big5 and g for job performance
 
 something about need for assessment of big5 and g in job performance
@@ -231,12 +228,12 @@ To assess the personality of participants providing their resume, we used the ge
 
 To assess the intelligence of participants providing their resume, we used the Intelligence-Structure-Test (IST) 2000-R [@liepmannIST]. We only used the basic module ("Grundmodul") to assess fluid intelligence. This module consists of 9 subtests in three domains: verbal, numeric, and figural. It has demonstrated very good reliability $\alpha > 0.95$ and validity [@liepmannIST].
 
-The participants voluntarily provided their resumes and were instructed to provide them "as is" without adhering to a special format provided by the authors. Resumes were subsequently anonymyzed by redacting any identifying information such as names, date of birth, company names, publication titles, or very specific job descriptions. In total, we received 25 resumes.
+The participants voluntarily provided their resumes and were instructed to provide them "as is" without adhering to a special format provided by the authors. Resumes were subsequently anonymyzed by redacting any identifying information such as names, date of birth, company names, publication titles, or very specific job descriptions.
 
 ## Procedure
-The participants providing their resume were part of a larger study (N = 200) that assessed the relationship between mental speed and intelligence. The full study consisted of two sessions. In the first session, participants first completed memory tasks while recording EEG for about 2 hours, then they completed a set of questionnaires, including the BFI-2, finally, they completed 4 short working-memory tasks. The second session was conducted on another day by a trained experimenter and consisted of the IST, which required 90 minutes to complete and Raven's Advanced Progressive Matrices [@raven1962advanced], which required 50 minutes to complete. Results of the APM are not reported here. Following completion of the second session, participants were emailed and informed about the aim of the present study, the extent to which their resumes would be used and could volunteer to provide a resume which would be anonymized.
+The participants providing their resume were part of a larger study (N = 200) that assessed the relationship between mental speed and intelligence. The full study consisted of two sessions. In the first session, participants first completed memory tasks while recording EEG for about 2 hours, then they completed a set of questionnaires, including the BFI-2. Finally, they completed 4 additional working-memory tasks. The second session was conducted on another day by a trained experimenter and consisted of the IST, which required 90 minutes to complete and Raven's Advanced Progressive Matrices [@raven1962advanced], which required 50 minutes to complete. Results of the APM are not reported here. Following completion of the second session, participants were emailed and informed about the aim of the present study, the extent to which their resumes would be used, and could volunteer to provide a resume which would be anonymized.
 
-In Study 1, participants completed an online-survey on the hosting platform SoSciSurvey [@leinert2024sosci]. The procedure was identical for Study 2, except that participants completed another, unrelated survey for about 10 minutes prior to the presented survey. 
+For the studies assessing personality judgments based on resumes, participants completed an online-survey on the hosting platform SoSciSurvey [@leinert2024sosci]. The procedure was identical for both Study 1 and Study 2, except that participants completed another, unrelated survey for about 10 minutes prior to the presented survey in the second sample. 
 
 First, participants gave informed consent, and subsequently were asked to provide demographic information, experience with the Big Five personality model (yes/no), and experience with selection processes including resumes (scale of 1 - "no experience"  to 5 - "a lot of experience"). Then, we instructed the participants to inspect five resumes carefully and provide a rating of the person's personality. Personality raters were given on sliders from 0 to 100 with no numeric labels but verbal labels in German on both ends of the slider (e.g. "reserved, withdrawn" vs. sociable, outgoing, social" for extraversion). These labels described the personality dimensions to be rated (for a complete overview, see Table A2).
 
@@ -310,7 +307,7 @@ papaja::apa_table(
 )
 ```
 
-Table \@ref(tab:rel-overview-tab) provides an overview of the interrater reliability for the resume judgments. Highest reliability was observed for intelligence (Study 1: `r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Intelligence")] %>% print_icc()`, Study 2: `r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Intelligence")] %>% print_icc()`), followed by extraversion (Study 1: `r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Extraversion")] %>% print_icc()`, Study 2: `r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Extraversion")] %>% print_icc()`). The lowest reliability was observed for agreeableness in Study 1 (`r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Agreeableness")] %>% print_icc()`) and openness in Study 2 (`r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Openness")] %>% print_icc()`). The number of participants required to achieve good reliability of an average judgment ranged from `r min(c(overview_reliability_table$required_1, overview_reliability_table$required_2))` to `r max(c(overview_reliability_table$required_1, overview_reliability_table$required_2))`.
+Table \@ref(tab:rel-overview-tab) provides an overview of the inter-rater reliability for the resume judgments. Highest reliability was observed for intelligence (Study 1: `r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Intelligence")] %>% print_icc()`, Study 2: `r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Intelligence")] %>% print_icc()`), followed by extraversion (Study 1: `r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Extraversion")] %>% print_icc()`, Study 2: `r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Extraversion")] %>% print_icc()`). The lowest reliability was observed for agreeableness in Study 1 (`r overview_reliability_table$study_1[which(overview_reliability_table$construct == "Agreeableness")] %>% print_icc()`) and openness in Study 2 (`r overview_reliability_table$study_2[which(overview_reliability_table$construct == "Openness")] %>% print_icc()`). The number of participants required to achieve good reliability of an average judgment ranged from `r min(c(overview_reliability_table$required_1, overview_reliability_table$required_2))` to `r max(c(overview_reliability_table$required_1, overview_reliability_table$required_2))`.
 
 ```{r acc-overview-tab}
 paste_cor <- function(cor_test){
@@ -374,11 +371,13 @@ Accuracy improved for all judgments after averaging across raters for each resum
 
 # Discussion
 
-Across two independent samples, we found that untrained raters showed low interrater reliability when judging personality traits from resumes. Consistent with this, the accuracy of single-rater personality judgments was generally low, suggesting that resume-based personality impressions are unlikely to provide sufficiently valid information for personnel selection. In contrast, intelligence judgments showed higher reliability and were strongly associated with objectively measured intelligence. 
+Across two independent samples, we found that untrained raters showed low inter-rater reliability when judging personality traits from resumes. Consistent with this, the accuracy of single-rater personality judgments was generally low, suggesting that resume-based personality impressions are unlikely to provide sufficiently valid information for personnel selection. In contrast, intelligence judgments showed higher reliability and were strongly associated with objectively measured intelligence.
 
-Averaging judgments across raters substantially improved both reliability and predictive accuracy for all constructs. Objectively measured scores correlated with averaged ratings of intelligence around $r > 0.75$ and personality up to $r = 0.53$. These findings indicate that resumes contain systematic information about applicants' personality and intelligence. Instead, the limitation in accuracy appears to lie less in the information contained in resumes and rather in single raters' ability to extract it reliably. 
+These findings of low accuracy are broadly consistent with previous research, although the literature has been remarkably heterogeneous with respect to resume materials, raters, and assessment procedures. Studies using student resumes have generally reported low inter-rater agreement and weak criterion validity for Big Five judgments, with somewhat stronger performance for extraversion, conscientiousness, or openness [e.g. @apers_are_2017; @cole_recruiters_2009; @burns_effects_2014], and better accuracy for intelligence judgments [@cole_using_2003].
 
-This raises the possibility that training recruiters to evaluate resumes more systematically may improve judgment accuracy [SEEE ALSO CITATION WHERE THEY DID THAT]. Similarly, recent advances in machine learning and large language models suggest that automated systems may be able to extract personality- and intelligence-related information from resumes more consistently than individual human raters [CITATION], representing a promising direction for future research.
+Averaging judgments across raters substantially improved both reliability and predictive accuracy for all constructs. Objectively measured scores correlated with averaged ratings of intelligence around $r > 0.75$ and personality up to $r = 0.53$. These findings indicate that resumes contain systematic information about applicants' personality and intelligence. Consequently, the limitation in accuracy appears to lie less in the information contained in resumes and rather in single raters' ability to extract it reliably. 
+
+This raises the possibility that training recruiters to evaluate resumes more systematically may improve judgment accuracy [@cole_validity_2005]. Similarly, recent advances in machine learning and large language models suggest that automated systems may be able to extract personality- and intelligence-related information from resumes [@grunenberg_machine_2024], representing a promising direction for future research.
 
 A major strength of the present work is the use of real resumes paired with validated measures of both personality and intelligence. At the same time, the resume sample was intentionally heterogeneous and covered applicants with diverse educational and occupational backgrounds. Consequently, it remains unclear to what extent the present findings generalize to personnel selection within a single profession or for a specific job advertisement, where resumes may be considerably more homogeneous. Furthermore, our participants were untrained laypersons rather than professional recruiters. Future studies should investigate avenues such as recruiter training or machine learning to improve judgment quality.
 
