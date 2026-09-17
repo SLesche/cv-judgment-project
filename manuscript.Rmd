@@ -218,6 +218,11 @@ For Study 1, we recruited `r nrow(s1_data)` participants stemming from a) the st
 
 For Study 2, we recruited `r nrow(s2_data)` part-time students from a professional study program representing a primarily working sample ($M_{age} =$ `r mean(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, $SD_{age} =$ `r sd(as.numeric(s2_data$SD02_01), na.rm = TRUE) %>% apa_num()`, `r mean(s2_data$SD01 == "1", na.rm = TRUE) %>% print_freq_percent()` female).
 
+```{r}
+source("scripts/final_code.R")
+source("scripts/final_code_s2.R")
+```
+
 We removed participants if they indicated that they were somewhat strongly or very strongly distracted during completion of the online survey. Additionally, we removed participants who completed the entire survey in less than half of median completion time. After exclusion, final sample sizes consisted of $N =$ `r n_raters_final_cleaned_s1` participants for Study 1 and $N =$ `r n_raters_final_cleaned_s2` participants for Study 2. 
 
 ## Materials
@@ -239,16 +244,7 @@ We estimated the reliability of ratings for each dimension (Big Five and Intelli
 We estimated the accuracy of ratings in two ways. First, to assess the accuracy of only a single rater, we calculated the correlation across all resumes and raters between the rater’s judgment and the underlying Big Five or intelligence score. Second, we averaged across all judgments for each resume and then calculated the correlation between average rating and underlying score. All analysis were conducted using `r r_citations$r`. All code and data necessary to reproduce this manuscript is available at **PROVIDE DOI here**.
 
 # Results
-
-```{r}
-source("scripts/final_code.R")
-source("scripts/final_code_s2.R")
-```
-
 On average, each resume was judged by `r average_raters_per_cv_s1` participants in Study 1 and `r average_raters_per_cv_s2` participants in Study 2. We provide an overview of descriptive information in the ESM.
-
-Table \@ref(tab:rel-overview-tab) provides an overview of the inter-rater reliability for the resume judgments. Highest reliability was observed for intelligence, followed by extraversion. The lowest reliability was observed for agreeableness in Study 1 and openness in Study 2. The number of participants required to achieve good reliability of an average judgment ranged from `r min(c(overview_reliability_table$required_1, overview_reliability_table$required_2))` to `r max(c(overview_reliability_table$required_1, overview_reliability_table$required_2))`.
-
 
 ```{r rel-overview-tab}
 # Consolidate reliability estimates
@@ -300,8 +296,7 @@ papaja::apa_table(
 )
 ```
 
-Table \@ref(tab:acc-overview-tab) provides an overview of the accuracy of resume judgments. Highest accuracy was observed for intelligence, followed by neuroticism. The lowest accuracy was observed for openness in both studies.Accuracy improved for all judgments after averaging across raters for each resume. Here, the average intelligence rating correlated with actual intelligence at `r overview_accuracy_table$avg_study_1[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` - `r overview_accuracy_table$avg_study_2[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` for both samples. Notably, resume-based intelligence judgments provided incremental validity on actual intelligence over applicants’ educational status in both studies, yielding around 16% additional variance explained (for additional information, see the ESM).
-
+Table \@ref(tab:rel-overview-tab) provides an overview of the inter-rater reliability for the resume judgments. Highest reliability was observed for intelligence, followed by extraversion. The lowest reliability was observed for agreeableness in Study 1 and openness in Study 2. The number of participants required to achieve good reliability of an average judgment ranged from `r min(c(overview_reliability_table$required_1, overview_reliability_table$required_2))` to `r max(c(overview_reliability_table$required_1, overview_reliability_table$required_2))`.
 
 ```{r acc-overview-tab}
 paste_cor <- function(cor_test){
@@ -360,6 +355,7 @@ papaja::apa_table(
 )
 ```
 
+Table \@ref(tab:acc-overview-tab) provides an overview of the accuracy of resume judgments. Highest accuracy was observed for intelligence, followed by neuroticism. The lowest accuracy was observed for openness in both studies.Accuracy improved for all judgments after averaging across raters for each resume. Here, the average intelligence rating correlated with actual intelligence at `r overview_accuracy_table$avg_study_1[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` - `r overview_accuracy_table$avg_study_2[which(overview_accuracy_table$construct == "Intelligence")] %>% print_cor()` for both samples. Notably, resume-based intelligence judgments provided incremental validity on actual intelligence over applicants’ educational status in both studies, yielding around 16% additional variance explained (for additional information, see the ESM).
 
 # Discussion
 
