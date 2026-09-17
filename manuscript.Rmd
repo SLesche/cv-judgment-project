@@ -67,7 +67,7 @@ affiliation:
   # add a second id using this syntax
 
 authornote: |
-  We thank Anja Liebrich for her help collecting the data. The authors have no conflicts of interest to declare. Data and code supporting the findings of this study can be found here: **ZENODO LINK**.
+  We thank Anja Liebrich for her help collecting the data. The authors have no conflicts of interest to declare. Data and code supporting the findings of this study can be found here: https://doi.org/10.5281/zenodo.22810287.
 
 abstract: |
   Personality and intelligence are important predictors of job performance. The present study examined whether these characteristics can be assessed at an early stage of the hiring process using only applicants’ resumes. We collected 25 resumes used in application processes from members of the general population and measured their personality and intelligence. Subsequently, two independent samples of 298 and 416 participants rated each applicant’s personality and intelligence based solely on the anonymized resumes.
