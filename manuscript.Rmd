@@ -1,6 +1,6 @@
 ---
-title             : "Judging a book by its cover - investigating personality and intelligence judgments based on resumes (**WIP**)"
-shorttitle        : "**WIP** Resume-based judgments"
+title             : "Judging a book by its cover - investigating personality and intelligence judgments based on resumes"
+shorttitle        : "Resume-based judgments"
 
 author: 
   - name          : "Sven Lesche"
@@ -8,44 +8,66 @@ author:
     corresponding : yes    # Define only one corresponding author
     address       : "Hauptstraße 47-51, 69117 Heidelberg"
     email         : "sven.lesche@psychologie.uni-heidelberg.de"
-    # role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
-    #   - "Conceptualization"
-    #   - "Writing - Original Draft Preparation"
-    #   - "Writing - Review & Editing"
+    role:         # Contributorship roles (e.g., CRediT, https://casrai.org/credit/)
+      - "Conceptualization"
+      - "Data curation"
+      - "Formal analysis"
+      - "Investigation"
+      - "Methodology"
+      - "Project administration"
+      - "Resources"
+      - "Software"
+      - "Supervision"
+      - "Validation"
+      - "Writing - Original Draft"
+      - "Writing - Review & Editing"
   - name          : "Valeria Maisch"
     affiliation   : "1"
-    # role:
-    #   - "Supervision"
-  - name          : "Annika Leisse"
-    affiliation   : "1"
-    # role:
-    #   - "Supervision"
-  - name          : "Carolin Strauß"
-    affiliation   : "1"
-    # role:
-    #   - "Supervision"
-  - name          : "Nathalie Engelmann"
-    affiliation   : "1"
-    # role:
-    #   - "Supervision"
-  - name          : "Nele Pfründer"
-    affiliation   : "1"
-    # role:
-    #   - "Supervision"
+    role:
+      - "Writing - Original Draft"
+      - "Writing - Review & Editing"
   - name          : "Tanja Bipp"
     affiliation   : "1"
-    # role:
-    #   - "Supervision"
+    role:
+      - "Resources"
+      - "Supervision"
+      - "Writing - Review & Editing"
+  - name          : "Annika Leisse"
+    affiliation   : "1"
+    role:
+      - "Conceptualization"
+      - "Investigation"
+      - "Validation"
+      - "Writing - Review & Editing"
+  - name          : "Carolin Strauß"
+    affiliation   : "1"
+    role:
+      - "Conceptualization"
+      - "Investigation"
+      - "Validation"
+      - "Writing - Review & Editing"
+  - name          : "Nathalie Engelmann"
+    affiliation   : "1"
+    role:
+      - "Conceptualization"
+      - "Investigation"
+      - "Validation"
+      - "Writing - Review & Editing"
+  - name          : "Nele Pfründer"
+    affiliation   : "1"
+    role:
+      - "Conceptualization"
+      - "Investigation"
+      - "Validation"
+      - "Writing - Review & Editing"
     
 affiliation:
   - id            : "1"
     institution   : "Ruprecht-Karls-University Heidelberg"
-  - id            : "2"
-    institution   : "Konstanz Business School"
   # add a second id using this syntax
 
 authornote: |
-  Author Notes go here.
+  We thank Anja Liebrich for her help collecting the data. The authors have no conflicts of interest to declare. Data and code supporting the findings of this study can be found here: **ZENODO LINK**.
 
 abstract: |
   Personality and intelligence are important predictors of job performance. The present study examined whether these characteristics can be assessed at an early stage of the hiring process using only applicants’ resumes. We collected 25 resumes used in application processes from members of the general population and measured their personality and intelligence. Subsequently, two independent samples of 298 and 416 participants rated each applicant’s personality and intelligence based solely on the anonymized resumes.
@@ -110,6 +132,7 @@ set.seed(1234)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed) # this adds random seed to all chunks
 knitr::opts_chunk$set(autodep = TRUE)
 knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 
 knitr::dep_auto()
 ```
